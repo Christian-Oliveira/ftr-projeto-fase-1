@@ -9,20 +9,23 @@ export const getUrlsRoute: FastifyPluginAsyncZod = async server => {
     {
       schema: {
         summary: 'List URLs',
+        tags: ['urls'],
         response: {
-          200: z.array(
-            z.object({
-              id: z.string().uuid(),
-              originalUrl: z.string().url(),
-              shortenedUrl: z.string().url(),
-              accessCount: z.number().int().nonnegative(),
-              createdAt: z.date(),
-            })
-          ).describe('List of URLs'),
-        }
+          200: z
+            .array(
+              z.object({
+                id: z.string().uuid(),
+                originalUrl: z.string().url(),
+                shortenedUrl: z.string().url(),
+                accessCount: z.number().int().nonnegative(),
+                createdAt: z.date(),
+              })
+            )
+            .describe('List of URLs'),
+        },
       },
     },
-    async (request, reply) => {
+    async (_, reply) => {
       const result = await getUrlsService()
 
       const urls = unwrapEither(result)

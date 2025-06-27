@@ -2,10 +2,33 @@ services:
   pg:
     image: bitnami/postgresql:latest
     ports:
-      - '5432:5432'
+      - '5432:$DB_PORT'
     environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=shortener_urls
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
     volumes:
       - './docker:/docker-entrypoint-initdb.d'
+    networks:
+      - app
+      - db
+
+  app:
+    build: .
+    depends_on:
+      - pg
+    container_name: shortened-url-server
+    ports:
+      - 3333:$PORT
+    env_file:
+      - .env
+    networks:
+      - app
+    
+
+volumes:
+  db:
+
+networks:
+  app:
+  db:

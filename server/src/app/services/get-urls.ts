@@ -1,23 +1,13 @@
-import { db } from "@/infra/db"
-import { schema } from "@/infra/db/schemas"
-import { Either, makeSuccess } from "@/shared/either"
+import UrlsRepository from '@/infra/db/repositories/urls-repository'
+import { type Either, makeSuccess } from '@/shared/either'
+import type IResponseUrlDTO from '../dtos/IResponseUrlDTO'
 
-type GetUrlResponse = {
-  id: string;
-  originalUrl: string;
-  shortenedUrl: string;
-  accessCount: number;
-  createdAt: Date;
-}
+export async function getUrlsService(): Promise<
+  Either<never, IResponseUrlDTO[]>
+> {
+  const urlsRepository = new UrlsRepository()
 
-export async function getUrlsService(): Promise<Either<never, GetUrlResponse[]>> {
-  const urls = await db.select({
-      id: schema.urls.id,
-      originalUrl: schema.urls.originalUrl,
-      shortenedUrl: schema.urls.shortenedUrl,
-      accessCount: schema.urls.accessCount,
-      createdAt: schema.urls.createdAt,
-    }).from(schema.urls)
+  const urls = await urlsRepository.findAll()
 
   return makeSuccess(urls)
 }

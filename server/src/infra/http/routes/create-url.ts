@@ -1,4 +1,6 @@
+import { createUrlInput } from '@/app/dtos/TRequestCreateUrlDTO'
 import { createUrlService } from '@/app/services/create-url'
+import { isSuccess, unwrapEither } from '@/shared/either'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
@@ -8,30 +10,38 @@ export const createUrlRoute: FastifyPluginAsyncZod = async server => {
     {
       schema: {
         summary: 'Create a new URL',
-        body: z.object({
-          originalUrl: z.string().min(1, 'URL original is required').url('Invalid URL format'),
-          shortenerUrl: z.string().min(1, 'URL shortener is required').url('Invalid URL format'),
-        }),
+        tags: ['urls'],
+        body: createUrlInput,
         response: {
           201: z.object({
-            urlId: z.string().uuid(),
-          }),
-          400: z.object({
-            message: z.string().describe('Error message for invalid input'),
+            id: z.string().uuid(),
           }),
           409: z.object({
-            message: z.string().describe('Error message for conflict, URL already exists'),
+            message: z
+              .string()
+              .describe('Error message for conflict, URL already exists'),
           }),
-        }
+        },
       },
     },
     async (request, reply) => {
-      const urlId = await createUrlService({
+      const result = await createUrlService({
         originalUrl: request.body.originalUrl,
-        shortenedUrl: request.body.shortenerUrl,
+        shortenedUrl: request.body.shortenedUrl,
       })
 
-      return urlId
+      if (isSuccess(result)) {
+        return reply.status(201).send({ id: result.success.id })
+      }
+
+      const error = unwrapEither(result)
+
+      switch (error.constructor.name) {
+        case 'UrlShortenedExists':
+          return reply.status(409).send({
+            message: error.message,
+          })
+      }
     }
   )
 }
