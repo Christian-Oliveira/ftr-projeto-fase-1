@@ -1,6 +1,6 @@
 import type IResponseUrlDTO from '@/app/dtos/IResponseUrlDTO'
-import { eq } from 'drizzle-orm'
-import { db } from '..'
+import { eq, ilike } from 'drizzle-orm'
+import { db, pg } from '..'
 import { schema } from '../schemas'
 
 type CreateUrlType = {
@@ -15,6 +15,9 @@ interface IUrlsRepository {
   findById(id: string): Promise<IResponseUrlDTO | undefined>
   IncrementAccessCount(id: string, currentAccessCount: number): Promise<void>
   delete(id: string): Promise<void>
+  getUrlsCursorBySearchQuery(
+    searchQuery?: string
+  ): AsyncIterable<IResponseUrlDTO[]>
 }
 
 export default class UrlsRepository implements IUrlsRepository {
@@ -117,6 +120,29 @@ export default class UrlsRepository implements IUrlsRepository {
     } catch (error) {
       console.log(error)
       throw new Error('Falha ao deletar URL.')
+    }
+  }
+
+  getUrlsCursorBySearchQuery(
+    searchQuery?: string
+  ): AsyncIterable<IResponseUrlDTO[]> {
+    try {
+      const { sql, params } = db
+        .select()
+        .from(schema.urls)
+        .where(
+          searchQuery
+            ? ilike(schema.urls.shortenedUrl, `%${searchQuery}%`)
+            : undefined
+        )
+        .toSQL()
+
+      const cursor = pg.unsafe(sql, params as string[]).cursor(100)
+
+      return cursor as AsyncIterable<IResponseUrlDTO[]>
+    } catch (error) {
+      console.log(error)
+      throw new Error('Falha ao buscar URLs.')
     }
   }
 }

@@ -1,6 +1,7 @@
 import { PassThrough, Transform } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 import { db, pg } from '@/infra/db'
+import UrlsRepository from '@/infra/db/repositories/urls-repository'
 import { schema } from '@/infra/db/schemas'
 import { uploadFileToStorage } from '@/infra/storage/upload-file-to-storage'
 import { type Either, makeSuccess } from '@/shared/either'
@@ -17,17 +18,8 @@ export async function exportUrlsService(
 ): Promise<Either<never, IResponseExportUrlsDTO>> {
   const { searchQuery } = exportUrlsInput.parse(input)
 
-  const { sql, params } = db
-    .select()
-    .from(schema.urls)
-    .where(
-      searchQuery
-        ? ilike(schema.urls.shortenedUrl, `%${searchQuery}%`)
-        : undefined
-    )
-    .toSQL()
-
-  const cursor = pg.unsafe(sql, params as string[]).cursor(2)
+  const urlsRepository = new UrlsRepository()
+  const cursor = urlsRepository.getUrlsCursorBySearchQuery(searchQuery)
 
   const csv = stringify({
     delimiter: ',',
