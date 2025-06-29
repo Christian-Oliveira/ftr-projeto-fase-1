@@ -9,6 +9,10 @@ const envSchema = z.object({
   DB_HOST: z.string(),
   DB_PORT: z.coerce.number().default(5432),
   DB_NAME: z.string(),
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_BUCKET: z.string(),
+  AWS_PUBLIC_URL_BUCKET: z.string().url(),
 })
 
 export const env = envSchema.parse(process.env)
