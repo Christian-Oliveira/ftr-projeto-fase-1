@@ -1,5 +1,5 @@
-import { ListUrls } from "./components/list-urls"
-import { RegisterUrlForm } from "./components/register-url-form"
+import { ListUrls } from './components/list-urls'
+import { RegisterUrlForm } from './components/register-url-form'
 
 export function App() {
   return (
