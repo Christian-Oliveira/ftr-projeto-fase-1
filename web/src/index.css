@@ -1,6 +1,49 @@
 @import "tailwindcss";
+@plugin "tailwind-scrollbar";
 
 @theme {
-    --font-sans: "Open Sans", "sans-serif";
-    --breakpoint-xs: 30rem;
+  --font-sans: "Open Sans", "sans-serif";
+  --breakpoint-xs: 30rem;
+  --color-blue-base: #2C46B1;
+  --color-blue-dark: #2C4091;
+  --color-danger: #B12C4D;
+
+  --color-gray-100: #F9F9FB;
+  --color-gray-200: #E4E6EC;
+  --color-gray-300: #CDCFD5;
+  --color-gray-400: #74798B;
+  --color-gray-500: #4D505C;
+  --color-gray-600: #1F2025;
+}
+
+@utility text-xs {
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+  font-weight: 400;
+  @apply uppercase;
+}
+
+@utility text-sm {
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+@utility text-md {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+
+
+@utility text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+@utility text-xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
 }
