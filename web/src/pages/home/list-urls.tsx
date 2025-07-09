@@ -46,6 +46,7 @@ export function ListUrls() {
             className="flex gap-1 items-center"
             size="icon"
             onClick={handleExportUrls}
+            disabled={urls.length === 0}
           >
             {isLoadingBtn ? (
               <FadeLoader
@@ -64,7 +65,7 @@ export function ListUrls() {
       >
         Meus links
       </CardTitle>
-      <CardBody className="m-6 max-h-[70vh] overflow-y-auto scrollbar overflow-x-hidden scrollbar-thumb-blue-dark">
+      <CardBody className="m-6 pr-1 max-h-[70vh] overflow-y-auto scrollbar overflow-x-hidden scrollbar-thumb-blue-dark">
         {urls.length > 0 && (
           urls.map((dataUrl: UrlResonseType, index: number) => (
             <div key={index}>

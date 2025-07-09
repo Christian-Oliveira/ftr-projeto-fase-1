@@ -38,20 +38,20 @@ export function ItemUrl(props: ItemUrlType) {
 
   return (
     <div className="flex flex-row gap-2 justify-between items-center">
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col flex-grow items-start max-w-[65%] overflow-hidden">
         <Button
-          className="cursor-pointer text-md text-blue-base truncate"
+          className="cursor-pointer text-md text-blue-base truncate overflow-hidden max-w-full text-left"
           variant="none"
           size="none"
           onClick={() => {
             window.open(completedUrlShortened, "_blank")
           }}
         >
-          <a>{completedUrlShortened}</a>
+          {completedUrlShortened}
         </Button>
-        <div className="text-sm text-gray-500 truncate">{data.originalUrl}</div>
+        <div className="text-sm text-gray-500 truncate overflow-hidden max-w-full">{data.originalUrl}</div>
       </div>
-      <div className="flex flex-row gap-1 items-center">
+      <div className="flex flex-row flex-shrink-0 gap-1 items-center whitespace-nowrap w-auto">
         <div className="text-sm text-gray-500 pr-2">{data.accessCount + ' acessos'}</div>
         <Button size="icon-sm" onClick={handleCopyUrl}>
           <CopyIcon size={16} />

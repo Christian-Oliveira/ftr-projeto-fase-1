@@ -7,7 +7,7 @@ const buttonVariants = tv({
   variants: {
     variant: {
       primary: "bg-blue-base text-white hover:bg-blue-dark disabled:bg-blue-base/70",
-      secondary: "bg-gray-200 text-gray-500 border-2 border-gray-200 hover:border-blue-base disabled:bg-blue-base/70",
+      secondary: "bg-gray-200 text-gray-500 border-2 border-gray-200 hover:border-blue-base disabled:bg-gray-200/50 disabled:border-gray-200/50 disabled:text-gray-500/50",
       none: "",
     },
 
