@@ -1,5 +1,5 @@
 import type IResponseUrlDTO from '@/app/dtos/IResponseUrlDTO'
-import { eq, ilike } from 'drizzle-orm'
+import { desc, eq, ilike } from 'drizzle-orm'
 import { db, pg } from '..'
 import { schema } from '../schemas'
 
@@ -32,6 +32,7 @@ export default class UrlsRepository implements IUrlsRepository {
           createdAt: schema.urls.createdAt,
         })
         .from(schema.urls)
+        .orderBy(desc(schema.urls.createdAt))
 
       return urls
     } catch (error) {
