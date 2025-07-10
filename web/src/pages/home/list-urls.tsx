@@ -33,7 +33,10 @@ export function ListUrls() {
 
   useEffect(() => {
     fetchUrls()
-  }, [])
+
+    window.addEventListener("focus", fetchUrls)
+    return () => window.removeEventListener("focus", fetchUrls)
+  }, [fetchUrls])
 
   return (
     <Card>
