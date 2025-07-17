@@ -49,7 +49,7 @@ export function ListUrls() {
             className="flex gap-1 items-center"
             size="icon"
             onClick={handleExportUrls}
-            disabled={urls.length === 0}
+            disabled={isLoadingBtn || urls.length === 0}
           >
             {isLoadingBtn ? (
               <FadeLoader
@@ -57,6 +57,7 @@ export function ListUrls() {
                 margin={-12}
                 width={2}
                 speedMultiplier={2}
+                color="#8F9092"
                 cssOverride={{ height: 0, width: 4, marginLeft: 12, marginTop: 8 }}
               />
             ) : (
